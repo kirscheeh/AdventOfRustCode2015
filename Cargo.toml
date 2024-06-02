@@ -24,4 +24,5 @@ path="src/day01.rs"
 
 [dependencies]
 crypto = "0.5.1"
+fancy-regex = "0.13.0"
 md5 = "0.7.0"
