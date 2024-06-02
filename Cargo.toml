@@ -3,6 +3,10 @@ name = "advent_of_code_2015"
 version = "0.1.0"
 
 [[bin]]
+name="day06"
+path="src/day06.rs"
+
+[[bin]]
 name="day05"
 path="src/day05.rs"
 
