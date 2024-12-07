@@ -1,0 +1,44 @@
+//  8
+
+fn main() {
+    let contents = fs::read_to_string("inputs/day08.txt") 
+        .expect("Should have been able to read the file"); //
+
+    let lines: Vec<&str> = contents.lines().collect();
+
+    let mut calculation: i32 = 0;
+
+    for line in lines {
+        let pattern = fancy_regex::Regex::new(r"\\x([0-9a-fA-F]{2})").unwrap();
+
+        // replacing the hex withits value does not work cause internally the representation and needed space is similar; so the new idea is to remove the 4 characters involved in the hex and then add the length of the resulting value later on (which is always 1 for /xNN)
+        let mut modified_line = line.to_string();
+        let mut added_length: i32 = 0;
+
+          // Iterate through matches
+        // Iterate through matches
+        for capture_result in pattern.captures_iter(line) {
+            match capture_result {
+                Ok(captures) => {
+                    // Get the full match
+                    let matched_text = captures.get(0).unwrap().as_str();
+                    added_length += 1;
+
+                    // Remove the matched part from the string
+                    if let Some(start) = modified_line.find(matched_text) {
+                        let end = start + matched_text.len();
+                        modified_line.replace_range(start..end, ""); // Remove the match
+                    }
+                }
+                Err(e) => {
+                    panic!("Regex error: {}", e); // Handle regex error
+                }
+            }
+        }
+
+        let result: String = modified_line.trim_matches('"').replace("\\\"", "\"").replace(r#"\\"#, r#"\"#).replace("\\\\", "\\");
+        calculation = calculation + (line.len() as i32 - result.len() as i32 - added_length);
+        println!("{} {}", line, result, )
+    }
+    println!("{}", calculation);
+}
